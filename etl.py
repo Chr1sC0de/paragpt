@@ -4,7 +4,7 @@ import pathlib as pt
 import pandas as pd
 try:
     import paragpt as sg
-except ImportError:
+except ModuleNotFoundError:
     import sys
     import pathlib as pt
     sys.path.append((pt.Path(__file__).parent/"src").as_posix())
@@ -46,7 +46,10 @@ train_of_thought = [
             elements removed and sentences rephrased for clarity. The key details, requirements, todos, and
             salient information will be preserved to ensure the overall meaning and intent of the conversation
             remain intact.
-            The paraphrase of the provided conversation is...
+
+            assistant_1: Let's begin the paraphrasing process
+            assistant_2: The paraphrased version of the conversation provided ..
+
         """,
     },
 ]
@@ -103,7 +106,7 @@ def load(
 
 
 if __name__ == "__main__":
-    file_path = pt.Path("./sample.vtt")
+    file_path = pt.Path("./sample2.vtt")
     paraphraser_model = "gpt-3.5-turbo"
     stage_1_cache = "stage1.parquet"
     stage_2_cache = "stage2.md"

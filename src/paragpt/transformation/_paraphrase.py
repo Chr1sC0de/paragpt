@@ -17,11 +17,15 @@ class StatelessPromptBuilder:
 
 prompt_conversation_paraphrase = StatelessPromptBuilder(
     tqc
-    << """paraphrase the following conversation,
+    << """paraphrase the dialogue of each individual in the following conversation,
     ensure that you respond using the same conversation format e.g.,
 
-        name1: paraphrase
-        name2: paraphrase
+        name_1: paraphrase
+        name_2: paraphrase
+        .
+        .
+        .
+        name_n: paraphrase
         etc....
 
     maintain each persons full name.
@@ -33,37 +37,47 @@ prompt_conversation_paraphrase = StatelessPromptBuilder(
 )
 
 
-
 def paraphrase(
     conversation: str,
     *args,
     system_prompt,
     user_prompt_builder: "StatelessPromptBuilder" = prompt_conversation_paraphrase,
     model: str = "gpt-3.5-turbo",
-    train_of_thought: List[Dict] = None
+    train_of_thought: List[Dict] = None,
+    n_retries=5
 ) -> str:
     import openai
+    from openai import APIError
     import pandas as pd
     from triple_quote_clean import TripleQuoteCleaner
-
-    print(prompt_conversation_paraphrase)
 
     if train_of_thought is None:
         train_of_thought = []
 
     tqc = TripleQuoteCleaner()
 
-
     gpt_input = user_prompt_builder(conversation)
 
-    output = openai.ChatCompletion.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": gpt_input},
-            *train_of_thought
-        ],
-    )
+    retry = 1
+
+    while True:
+        try:
+            output = openai.ChatCompletion.create(
+                model=model,
+                temperature=0.2,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": gpt_input},
+                    *train_of_thought,
+                ],
+            )
+            break
+        except APIError as e:
+            if retry > n_retries:
+                raise e
+        retry += 1
+        if retry > n_retries:
+            raise Exception("Max Retries Attempted")
 
     message = output["choices"][0]["message"]["content"]
 

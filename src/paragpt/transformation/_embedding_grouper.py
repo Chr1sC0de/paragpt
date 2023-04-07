@@ -14,7 +14,7 @@ def _rev_sigmoid(x: float) -> float:
     return 1 / (1 + math.exp(0.5 * x))
 
 
-def _activate_similarities(similarities: np.array, n_ticks: int = 10) -> np.array:
+def _activate_similarities(similarities: np.array, n_ticks: int = 9) -> np.array:
     n_ticks = min(n_ticks, similarities.shape[0])
     x = np.linspace(-10, 10, n_ticks)
     y = np.vectorize(_rev_sigmoid)
@@ -88,8 +88,10 @@ def group_by_embedding(df: pd.DataFrame, order=2, group_weight=1200) -> List[str
         current_weight+=weight
         if current_weight > group_weight:
             current_weight = 0
+            new_groupings.append(current_group)
             current_group += 1
-        new_groupings.append(current_group)
+        else:
+            new_groupings.append(current_group)
     snippet_n_tokens["group"] = new_groupings
     output = snippet_n_tokens.groupby("group")["snippet"].apply(lambda x : "\n".join(x)).to_list()
 

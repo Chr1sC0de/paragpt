@@ -3,7 +3,7 @@ import os
 from triple_quote_clean import TripleQuoteCleaner
 try:
     import paragpt as sg
-except ImportError:
+except ModuleNotFoundError:
     import sys
     import pathlib as pt
     sys.path.append((pt.Path(__file__).parent/"src").as_posix())
@@ -122,10 +122,6 @@ def main():
         else:
             st.markdown("Click `run` to start paraphrasing")
             runner_switch = False
-            print(runner_switch)
-
-            def flip_runner():
-                runner_switch = True
 
             if st.button("run", type="primary", use_container_width=True):
                 with st.spinner("Waiting for paraphraser to complete..."):
