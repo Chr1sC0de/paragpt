@@ -60,11 +60,10 @@ def paraphrase(
 
     retry = 1
 
-    while True:
+    while retry <= n_retries:
         try:
             output = openai.ChatCompletion.create(
                 model=model,
-                temperature=0.2,
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": gpt_input},
@@ -76,8 +75,6 @@ def paraphrase(
             if retry > n_retries:
                 raise e
         retry += 1
-        if retry > n_retries:
-            raise Exception("Max Retries Attempted")
 
     message = output["choices"][0]["message"]["content"]
 

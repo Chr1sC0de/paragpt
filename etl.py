@@ -108,12 +108,16 @@ def load(
 if __name__ == "__main__":
     file_path = pt.Path("./sample2.vtt")
     paraphraser_model = "gpt-3.5-turbo"
-    stage_1_cache = "stage1.parquet"
-    stage_2_cache = "stage2.md"
+    # stage_1_cache = "stage1.parquet"
+    # stage_2_cache = "stage2.md"
+    stage_1_cache = None
+    stage_2_cache = None
     content = extractor(file_path)
-    load(
+    output = load(
         content,
         paraphraser_model=paraphraser_model,
         stage_1_cache=stage_1_cache,
         stage_2_cache=stage_2_cache,
     )
+
+    print(output)

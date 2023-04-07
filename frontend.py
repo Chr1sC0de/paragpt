@@ -60,11 +60,11 @@ def main():
             "system prompt", etl._system_prompt, label_visibility="collapsed"
         )
 
-        st.subheader("Summarization Prompt")
+        st.subheader("Paraphraser Prompt")
         st.write(
             tqc
             << """
-            This prompt prepends every paraphrasable section
+            This prompt prepends every paraphrasable chunk
             """
         )
         summarization_prompt = st.markdown(
@@ -116,29 +116,30 @@ def main():
                 st.markdown("```\n" + content[:200] + "\n```")
 
         if open_api_key == "":
-            st.markdown("To run the paraphraser `provide an OpenAPI key`")
+            st.markdown("To run the paraphraser `provide an OpenAI API key`")
         elif uploaded_file is None:
             st.markdown("To run the paraphraser `provide VTT file`")
         else:
             st.markdown("Click `run` to start paraphrasing")
-            runner_switch = False
-
             if st.button("run", type="primary", use_container_width=True):
-                with st.spinner("Waiting for paraphraser to complete..."):
-                    paraphrased = etl.load(
-                        content,
-                        paraphraser_model=paraphraser_model,
-                        system_prompt=system_prompt,
-                        stage_1_cache=stage_1_cache,
-                        stage_2_cache=stage_2_cache,
-                        max_tokens_per_chunk=max_tokens_per_chunk,
-                        start_chunking=start_chunking
+                try:
+                    with st.spinner("Waiting for paraphraser to complete..."):
+                        paraphrased = etl.load(
+                            content,
+                            paraphraser_model=paraphraser_model,
+                            system_prompt=system_prompt,
+                            stage_1_cache=stage_1_cache,
+                            stage_2_cache=stage_2_cache,
+                            max_tokens_per_chunk=max_tokens_per_chunk,
+                            start_chunking=start_chunking
+                        )
+                    st.success("Paraphrase complete")
+                    st.subheader("Paraphrased Text")
+                    st.text_area(
+                        "paraphrased", paraphrased, label_visibility="collapsed", height=300
                     )
-                st.success("Paraphrase complete")
-                st.subheader("Paraphrased Text")
-                st.text_area(
-                    "paraphrased", paraphrased, label_visibility="collapsed", height=300
-                )
+                except:
+                    st.error('Something Went Wrong!! Check your API key', icon="🚨")
 
     return
 
