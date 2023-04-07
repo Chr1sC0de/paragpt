@@ -2,7 +2,11 @@ import re
 import numpy as np
 import pathlib as pt
 import pandas as pd
-import paragpt as sg
+try:
+    import paragpt as sg
+except ImportError:
+    import pathlib as pt
+    sys.path.append((pt.Path(__file__).parent/"src"))
 from numpy import vectorize
 from functools import partial
 import paragpt.transformation as T
