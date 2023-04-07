@@ -38,6 +38,7 @@ openai==0.27.4
 packaging==23.0
 pandarallel==1.6.4
 pandas==1.5.3
+-e git+https://github.com/Chr1sC0de/paragpt.git
 pathspec==0.11.1
 Pillow==9.5.0
 platformdirs==3.2.0
@@ -60,6 +61,7 @@ scikit-learn==1.2.2
 scipy==1.10.1
 six==1.16.0
 smmap==5.0.0
+smrygpt==0.0.0
 streamlit==1.21.0
 tenacity==8.2.2
 threadpoolctl==3.1.0
