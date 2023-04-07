@@ -6,7 +6,7 @@ try:
 except ImportError:
     import sys
     import pathlib as pt
-    sys.path.append((pt.Path(__file__).parent/"src"))
+    sys.path.append((pt.Path(__file__).parent/"src").as_posix())
     import paragpt as sg
 import etl
 import streamlit as st
