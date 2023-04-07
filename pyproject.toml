@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name         = "paragpt"
+dependencies = [
+    "streamlit",
+    "openai",
+    "tiktoken",
+    "matplotlib",
+    "plotly",
+    "scipy",
+    "scikit-learn",
+    "pyarrow"
+]
+authors = [
+    {name = "Chris Mamon", email="chrisam1993@live.com"}
+]
+dynamic = ["version"]
+
+[tool.hatch.version]
+path = "src/paragpt/__init__.py"
