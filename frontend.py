@@ -1,9 +1,12 @@
+import sys
 import openai
 import os
 from triple_quote_clean import TripleQuoteCleaner
 import paragpt as sg
 import etl
 import streamlit as st
+
+sys.path.append((pt.Path(__file__).parent/"src"))
 
 tqc = TripleQuoteCleaner()
 
