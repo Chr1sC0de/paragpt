@@ -5,8 +5,10 @@ import pandas as pd
 try:
     import paragpt as sg
 except ImportError:
+    import sys
     import pathlib as pt
     sys.path.append((pt.Path(__file__).parent/"src"))
+    import paragpt as sg
 from numpy import vectorize
 from functools import partial
 import paragpt.transformation as T
