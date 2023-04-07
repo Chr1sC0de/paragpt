@@ -5,6 +5,7 @@ from triple_quote_clean import TripleQuoteCleaner
 try:
     import paragpt as sg
 except ImportError:
+    import pathlib as pt
     sys.path.append((pt.Path(__file__).parent/"src"))
 import etl
 import streamlit as st
