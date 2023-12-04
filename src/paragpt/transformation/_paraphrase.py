@@ -48,13 +48,10 @@ def paraphrase(
 ) -> str:
     import openai
     from openai import APIError
-    import pandas as pd
-    from triple_quote_clean import TripleQuoteCleaner
+    from paragpt.transformation import no_ssl_verification
 
     if train_of_thought is None:
         train_of_thought = []
-
-    tqc = TripleQuoteCleaner()
 
     gpt_input = user_prompt_builder(conversation)
 
@@ -62,14 +59,15 @@ def paraphrase(
 
     while retry <= n_retries:
         try:
-            output = openai.ChatCompletion.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": gpt_input},
-                    *train_of_thought,
-                ],
-            )
+            with no_ssl_verification():
+                output = openai.ChatCompletion.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": gpt_input},
+                        *train_of_thought,
+                    ],
+                )
             break
         except APIError as e:
             if retry > n_retries:

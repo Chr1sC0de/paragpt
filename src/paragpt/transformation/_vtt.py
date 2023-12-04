@@ -13,6 +13,8 @@ def brush_up_vtt(text: str) -> str:
 
 
 def clean_teams_vtt(text: str) -> List[str]:
+    original_text = text
+    original_text_len = len(text)
     text = brush_up_vtt(text)
     found = re.findall("<v .+?>.+?</v>", text)
     speaker_text = [re.findall("<v (.+?)>(.+?)</v>", line)[0] for line in found]
@@ -26,5 +28,8 @@ def clean_teams_vtt(text: str) -> List[str]:
             conversation[-1] += " %s" % text
 
         previous_speaker = speaker
+
+    if (len(conversation) == 0) and original_text_len > 0:
+        conversation = original_text.split("\n\n")
 
     return conversation

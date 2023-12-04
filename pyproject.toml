@@ -12,7 +12,9 @@ dependencies = [
     "plotly",
     "scipy",
     "scikit-learn",
-    "pyarrow"
+    "pyarrow",
+    "nltk"
+
 ]
 authors = [
     {name = "Chris Mamon", email="chrisam1993@live.com"}

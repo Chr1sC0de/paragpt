@@ -2,12 +2,14 @@ import re
 import numpy as np
 import pathlib as pt
 import pandas as pd
+
 try:
     import paragpt as sg
 except ModuleNotFoundError:
     import sys
     import pathlib as pt
-    sys.path.append((pt.Path(__file__).parent/"src").as_posix())
+
+    sys.path.append((pt.Path(__file__).parent / "src").as_posix())
     import paragpt as sg
 from numpy import vectorize
 from functools import partial
@@ -72,7 +74,7 @@ def load(
     stage_1_cache=None,
     stage_2_cache=None,
     max_tokens_per_chunk=1500,
-    start_chunking=2800
+    start_chunking=2800,
 ) -> str:
     transformer = sg.utils.Pipeline(
         T.clean_teams_vtt,

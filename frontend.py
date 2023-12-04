@@ -1,13 +1,17 @@
+import traceback
 import openai
 import os
 from triple_quote_clean import TripleQuoteCleaner
+
 try:
     import paragpt as sg
 except ModuleNotFoundError:
     import sys
     import pathlib as pt
-    sys.path.append((pt.Path(__file__).parent/"src").as_posix())
+
+    sys.path.append((pt.Path(__file__).parent / "src").as_posix())
     import paragpt as sg
+
 import etl
 import streamlit as st
 
@@ -16,7 +20,7 @@ tqc = TripleQuoteCleaner()
 
 extractor = sg.utils.Pipeline(lambda x: x.read().decode("utf8").replace("\r\n", "\n"))
 
-developing = False
+developing = True
 
 if developing:
     api_key = os.getenv("OPENAI_API_KEY")
@@ -122,24 +126,29 @@ def main():
         else:
             st.markdown("Click `run` to start paraphrasing")
             if st.button("run", type="primary", use_container_width=True):
-                try:
-                    with st.spinner("Waiting for paraphraser to complete..."):
-                        paraphrased = etl.load(
-                            content,
-                            paraphraser_model=paraphraser_model,
-                            system_prompt=system_prompt,
-                            stage_1_cache=stage_1_cache,
-                            stage_2_cache=stage_2_cache,
-                            max_tokens_per_chunk=max_tokens_per_chunk,
-                            start_chunking=start_chunking
-                        )
-                    st.success("Paraphrase complete")
-                    st.subheader("Paraphrased Text")
-                    st.text_area(
-                        "paraphrased", paraphrased, label_visibility="collapsed", height=300
+                # try:
+                with st.spinner("Waiting for paraphraser to complete..."):
+                    paraphrased = etl.load(
+                        content,
+                        paraphraser_model=paraphraser_model,
+                        system_prompt=system_prompt,
+                        stage_1_cache=stage_1_cache,
+                        stage_2_cache=stage_2_cache,
+                        max_tokens_per_chunk=max_tokens_per_chunk,
+                        start_chunking=start_chunking,
                     )
-                except:
-                    st.error('Something Went Wrong!! Check your API key', icon="🚨")
+                st.success("Paraphrase complete")
+                st.subheader("Paraphrased Text")
+                st.text_area(
+                    "paraphrased",
+                    paraphrased,
+                    label_visibility="collapsed",
+                    height=300,
+                )
+                # except Exception as e:
+                #     st.error(
+                #         f"Something Went Wrong!! {traceback.format_exc()}", icon="🚨"
+                #     )
 
     return
 
