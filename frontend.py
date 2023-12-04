@@ -20,7 +20,7 @@ tqc = TripleQuoteCleaner()
 
 extractor = sg.utils.Pipeline(lambda x: x.read().decode("utf8").replace("\r\n", "\n"))
 
-developing = True
+developing = False
 
 if developing:
     api_key = os.getenv("OPENAI_API_KEY")
